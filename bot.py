@@ -8,8 +8,8 @@ load_dotenv()
 
 user_storage = set()
 activity = disnake.Activity(
-    name="information",
-    type=disnake.ActivityType.watching,
+    name="music",
+    type=disnake.ActivityType.listening,
 )
 
 bot = commands.Bot(command_prefix="~!",
