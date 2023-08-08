@@ -12,7 +12,8 @@ class radio_voice(commands.Cog):
                               voice_channel: disnake.VoiceChannel = commands.Param(description="Укажите канал.")):
         await inter.response.defer()
         url_music = "http://stream.radioparadise.com"
-        source = FFmpegPCMAudio(url_music)
+        bitrate = voice_channel.bitrate + 1000
+        source = FFmpegPCMAudio(url_music, options=f'-b:a {bitrate}')
         permision = voice_channel.permissions_for(inter.guild.me)
         if permision.connect:
             if permision.speak:
