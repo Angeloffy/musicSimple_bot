@@ -20,9 +20,29 @@ bot = commands.Bot(command_prefix="~!",
 
 bot.remove_command("help")
 
+
 @bot.event
 async def on_ready():
     print("BOT OK!")
+
+
+@bot.event
+async def on_voice_state_update(member: disnake.Member, before: disnake.VoiceState,
+                                after: disnake.VoiceState):
+    voice_client = member.guild.voice_client
+
+    if voice_client:
+        channel = voice_client.channel
+        members_in_channel = channel.members
+
+        active_users_count = sum(1 for member in members_in_channel if not member.bot)
+
+        if active_users_count == 0:
+            if voice_client.is_playing():
+                voice_client.stop()
+                print("Stopped playback")
+        else:
+            pass
 
 
 for filename in os.listdir('./cogs'):
