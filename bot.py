@@ -2,7 +2,7 @@ import os
 import disnake
 from disnake.ext import commands
 from dotenv import load_dotenv
-from disnake import Intents
+from disnake import Intents, FFmpegPCMAudio
 
 load_dotenv()
 
@@ -41,8 +41,14 @@ async def on_voice_state_update(member: disnake.Member, before: disnake.VoiceSta
             if voice_client.is_playing():
                 voice_client.stop()
                 print("Stopped playback")
-        else:
+        elif voice_client.is_playing() and voice_client.channel == after.channel:
             pass
+        elif active_users_count >= 1 and voice_client.is_connected():
+            url_music = "http://stream.radioparadise.com"
+            bitrate = channel.bitrate + 1000
+            source = FFmpegPCMAudio(url_music, options=f'-b:a {bitrate}')
+            voice_client.play(source)
+            print("Resumed playback")
 
 
 for filename in os.listdir('./cogs'):
